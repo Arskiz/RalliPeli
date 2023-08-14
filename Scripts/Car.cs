@@ -37,6 +37,7 @@ public class Car : MonoBehaviour
     private Essentials essentials;
     private AudioManager audioManager;
 
+    public ParticleSystem explosion;
     private CarMovement carMovement;
     // Get Car Data class instance
     public GetCarData carData = new GetCarData();
@@ -67,9 +68,12 @@ public class Car : MonoBehaviour
     {
         carMovement.currentSpeed = 0;
         playerStats.score = 0;
-        currentCar.gameObject.SetActive(true);
-        currentCar.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count - 1)].transform.position;
-        currentCar.rotation = Quaternion.Euler(0f, 90f, 0f);
+        if(currentCar != null){
+            currentCar.gameObject.SetActive(true);
+            currentCar.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count - 1)].transform.position;
+            currentCar.rotation = Quaternion.Euler(0f, 90f, 0f);
+        }
+        
         if(audioManager.playing)
             audioManager.PlayClip(audioManager.gameMusic, true);
         carMovement.leftKeyPressed = false;
@@ -153,9 +157,20 @@ public class Car : MonoBehaviour
     // Die
     public void Die()
     {
-        uIManager.Died();
+        StartCoroutine(ExplosionTimer());
+        
+    }
+
+    IEnumerator ExplosionTimer(){
+        Debug.Log("Died");
+        explosion.gameObject.SetActive(true);
+        explosion.Play();
+        yield return new WaitForSeconds(1);
+        explosion.Stop();
+        explosion.gameObject.SetActive(false);
         currentCar.gameObject.SetActive(false);
         playerStats.OnDied();
+        uIManager.Died();
     }
 
 

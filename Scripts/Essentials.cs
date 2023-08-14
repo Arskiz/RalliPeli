@@ -35,6 +35,39 @@ public class Essentials : MonoBehaviour
         button.interactable = false;
     }
 
+    public IEnumerator FadeText(int inOrOut, TextMeshProUGUI textObject, float fadeMultiplier)
+    {
+        Color originalColor = textObject.color;
+        Color targetColor;
+
+        if (inOrOut == 0)
+        {
+            targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, 1);
+        }
+        else
+        {
+            targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+        }
+
+        float t = 0;
+
+        while (t < 1)
+        {
+            t += Time.deltaTime * fadeMultiplier;
+            textObject.color = Color.Lerp(originalColor, targetColor, t);
+            yield return null;
+        }
+    }
+
+    public IEnumerator FadeTextInOut(TextMeshProUGUI textToFade)
+    {
+        yield return FadeText(0, textToFade, 1.0f); // Fade in
+        yield return new WaitForSeconds(2.0f); // Wait for 2 seconds
+        yield return FadeText(1, textToFade, 1.0f); // Fade out
+    }
+
+
+
     public void SwitchMenu(GameObject old, GameObject target)
     {
         old.SetActive(false);
