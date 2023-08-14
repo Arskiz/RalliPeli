@@ -8,6 +8,7 @@ public class PlayerStats : MonoBehaviour
     private CarMovement carMovement;
     private Car carScript;
     private Essentials essentials;
+    private UIManager uIManager;
 
     [Header("Variables")]
     public float score;
@@ -17,6 +18,9 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI scoreAmountText;
 
 
+    void Start(){
+        uIManager = FindAnyObjectByType<UIManager>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -62,6 +66,14 @@ public class PlayerStats : MonoBehaviour
         if (PlayerPrefs.GetInt("Score") != 0)
         {
             this.highScore = PlayerPrefs.GetInt("Score");
+        }
+
+        // FPSLimit
+        if(PlayerPrefs.GetInt("FPSLimit") != 0)
+        {
+            Application.targetFrameRate = (int)PlayerPrefs.GetFloat("FPSLimit");
+            uIManager.fpsLimit.value = PlayerPrefs.GetFloat("FPSLimit");
+            
         }
     }
     
