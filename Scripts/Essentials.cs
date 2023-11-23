@@ -35,6 +35,33 @@ public class Essentials : MonoBehaviour
         button.interactable = false;
     }
 
+    public void SetCheckboxInteractable(Toggle checkbox, bool targetStatus){
+        checkbox.interactable = targetStatus;
+    }
+    public void SetCheckboxInteractable(Toggle checkbox, Toggle checkbox2, bool targetStatus){
+        checkbox.interactable = targetStatus;
+        checkbox2.interactable = targetStatus;
+    }
+    public void SetCheckboxInteractable(Toggle checkbox, Toggle checkbox2, Toggle checkbox3, bool targetStatus){
+        checkbox.interactable = targetStatus;
+        checkbox2.interactable = targetStatus;
+        checkbox3.interactable = targetStatus;
+    }
+
+
+    public void SetButtonInteractable(Button button, bool targetStatus){
+        button.interactable = targetStatus;
+    }
+    public void SetButtonInteractable(Button button, Button button2, bool targetStatus){
+        button.interactable = targetStatus;
+        button2.interactable = targetStatus;
+    }
+    public void SetButtonInteractable(Button button, Button button2, Button button3, bool targetStatus){
+        button.interactable = targetStatus;
+        button2.interactable = targetStatus;
+        button3.interactable = targetStatus;
+    }
+
     public IEnumerator FadeText(int inOrOut, TextMeshProUGUI textObject, float fadeMultiplier)
     {
         Color originalColor = textObject.color;
@@ -59,11 +86,18 @@ public class Essentials : MonoBehaviour
         }
     }
 
-    public IEnumerator FadeTextInOut(TextMeshProUGUI textToFade)
+    public IEnumerator FadeTextOut(TextMeshProUGUI textToFade)
     {
         yield return FadeText(0, textToFade, 1.0f); // Fade in
         yield return new WaitForSeconds(2.0f); // Wait for 2 seconds
         yield return FadeText(1, textToFade, 1.0f); // Fade out
+    }
+
+    public IEnumerator FadeTextIn(TextMeshProUGUI textToFade)
+    {
+        yield return FadeText(1, textToFade, 1.0f); // Fade in
+        yield return new WaitForSeconds(2.0f); // Wait for 2 seconds
+        yield return FadeText(0, textToFade, 1.0f); // Fade out
     }
 
 

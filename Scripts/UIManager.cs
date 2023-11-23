@@ -1,7 +1,8 @@
 
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using System.Collections;
+using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ public class UIManager : MonoBehaviour
     public GameObject gameUIScreen;
     public GameObject deathScreen;
     public GameObject settingsScreen;
+    public GameObject shopScreen;
+
     public bool playing;
     public TextMeshProUGUI oldHighScoreText;
     public TextMeshProUGUI highScoreText;
@@ -22,6 +25,7 @@ public class UIManager : MonoBehaviour
     private Car carScript;
     private AudioManager audioManager;
     private CarMovement carMovement;
+
     [Header("Graphics")]
     public Slider fpsLimit;
     public TextMeshProUGUI fpsAmountText;
@@ -53,6 +57,7 @@ public class UIManager : MonoBehaviour
         deathScreen.SetActive(false);
         gameUIScreen.SetActive(false);
         settingsScreen.SetActive(false);
+        shopScreen.SetActive(false);
 
         if (PlayerPrefs.GetInt("FPSCounter") == 0)
         {
@@ -191,13 +196,13 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        // FPSLimit
+        //  FPSLimit
         fpsAmountText.text = ((int)fpsLimit.value).ToString();
 
-        //FPSCounter
+        //  FPSCounter
         fpsCounterText.text = "FPS: " + ((int)(1f / Time.deltaTime)).ToString();
 
-        //Speedometer
+        //  Speedometer
         speedCounterText.text = ((int)carMovement.currentSpeed).ToString() + "km/h";
     }
 
@@ -215,20 +220,37 @@ public class UIManager : MonoBehaviour
         if (done)
         {
             if (audioManager.playing)
-                audioManager.PlayClip(audioManager.deathClip, false);
+                audioManager.PlayClip(audioManager.loseClip, false);
 
 
             if (playerStats.score > PlayerPrefs.GetInt("Score"))
                 highScoreText.text = "Highscore!: " + ((int)playerStats.score).ToString();
             else
             {
+                //playOnDeath.SetActive(false);
                 int random = Random.Range(0, bullyWordsList.Count);
-                essentials.StartCoroutine(essentials.FadeTextInOut(highScoreText));
+                essentials.StartCoroutine(essentials.FadeTextOut(highScoreText));
+                //playOnDeath.SetActive(true);
                 highScoreText.text = bullyWordsList[random];
             }
+            StartCoroutine(WaitAfterDied(this.deathScreen));
         }
 
+        IEnumerator WaitAfterDied(GameObject gameObject)
+        {
+            // Check death screen's status
+            if (gameObject.activeSelf)
+            {
+                yield return new WaitForSeconds(4.2f);
+                essentials.SwitchMenu(deathScreen, playScreen);
 
+
+            }
+        }
+    }
+
+    public void Shop(){
+        essentials.SwitchMenu(playScreen, shopScreen);
     }
 
 }

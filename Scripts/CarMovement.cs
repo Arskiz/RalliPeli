@@ -7,7 +7,7 @@ public class CarMovement : MonoBehaviour
 {
     private Car carScript;
     private Essentials essentials;
-    private Rigidbody rb;
+    public Rigidbody rb;
     private UIManager uIManager;
 
     [Header("Movement Variables")]
@@ -26,6 +26,7 @@ public class CarMovement : MonoBehaviour
         essentials = FindAnyObjectByType<Essentials>();
         carScript = FindAnyObjectByType<Car>();
         uIManager = FindAnyObjectByType<UIManager>();
+
     }
 
     // Fixed Update
@@ -39,7 +40,7 @@ public class CarMovement : MonoBehaviour
         }
     }
 
-    
+
     // Update the currentCar's rigidbody by getting the current car object's rigidbody from the carScript
     void UpdateCar()
     {
@@ -57,14 +58,16 @@ public class CarMovement : MonoBehaviour
         // A-key
         if (essentials.KeyHeldDown(leftKey) || leftKeyPressed)
         {
-            RotateCar(-carScript.carData.turnForce * currentSpeed / 5);
+            RotateCar(carScript.carData.turnForce * currentSpeed / 5, 0);
         }
 
-        // D-key
+        else// D-key
         if (essentials.KeyHeldDown(rightKey) || rightKeyPressed)
         {
-            RotateCar(carScript.carData.turnForce * currentSpeed / 5);
+            RotateCar(carScript.carData.turnForce * currentSpeed / 5, 1);
         }
+
+
     }
 
 
@@ -80,10 +83,17 @@ public class CarMovement : MonoBehaviour
             rb.velocity = carScript.currentCar.forward * currentSpeed;
     }
 
-    void RotateCar(float amount)
+    public void RotateCar(float amount, int key)
     {
-        Vector3 rotation = carScript.currentCar.eulerAngles;
-        rotation.y += amount * Time.deltaTime;
+        Vector3 rotation = carScript.currentCar.rotation.eulerAngles;
+        if (key == 1)
+        {
+            rotation.y += amount * Time.deltaTime;
+        }
+        else if (key == 0)
+        {
+            rotation.y -= amount * Time.deltaTime;
+        }
         carScript.currentCar.eulerAngles = rotation;
     }
 

@@ -48,7 +48,8 @@ public class PlayerStats : MonoBehaviour
     }
 
     void UpdateScore(){
-        score += 1f * Time.deltaTime * carMovement.currentSpeed;
+        if(uIManager.playing)
+            score += 1f * Time.deltaTime * carMovement.currentSpeed;
     }
 
     public void OnDied(){

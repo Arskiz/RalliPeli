@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip gameMusic;
     public AudioClip deathClip;
     public AudioClip idleClip;
+    public AudioClip loseClip;
 
     public Button audioToggle;
 
@@ -78,7 +79,22 @@ public class AudioManager : MonoBehaviour
         
     }
 
+    void Update(){
+        if (playing){
+            source.volume = 1;
+        }
+        else
+        {
+            source.volume = 0;
+        }
+    }
+
     public void PlayGame(){
-        this.PlayClip(gameMusic, true);
+        int random = Random.Range(0, 2);
+        print(random.ToString());
+        if(random == 0)
+            this.PlayClip(gameMusic, true);
+        else if(random == 1)
+            this.PlayClip(idleClip, true);
     }
 }

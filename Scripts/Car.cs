@@ -73,9 +73,8 @@ public class Car : MonoBehaviour
             currentCar.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count - 1)].transform.position;
             currentCar.rotation = Quaternion.Euler(0f, 90f, 0f);
         }
-        
-        if(audioManager.playing)
-            audioManager.PlayClip(audioManager.gameMusic, true);
+    
+        audioManager.PlayGame();
         carMovement.leftKeyPressed = false;
         carMovement.rightKeyPressed = false;
 
@@ -83,7 +82,10 @@ public class Car : MonoBehaviour
         {
             T.Clear();
         }
-
+        Vector3 spawnRot = new Vector3(0,90,0);
+        carMovement.rb.freezeRotation = true;
+        currentCar.rotation = Quaternion.Euler(spawnRot);
+        carMovement.rb.freezeRotation = false;
     }
 
     // Constantly loop throught the carsList-list and change currentCar to the current active object
@@ -162,10 +164,12 @@ public class Car : MonoBehaviour
     }
 
     IEnumerator ExplosionTimer(){
+        
         Debug.Log("Died");
         explosion.gameObject.SetActive(true);
+        audioManager.PlayClip(audioManager.deathClip, false);
         explosion.Play();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         explosion.Stop();
         explosion.gameObject.SetActive(false);
         currentCar.gameObject.SetActive(false);
